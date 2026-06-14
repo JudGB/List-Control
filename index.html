@@ -1,686 +1,460 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#0E0E10" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>ListControl</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" />
+</head>
+<body>
 
-<style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-:root {
-  --lc-bg: #0E0E10;
-  --lc-surface: #18181C;
-  --lc-surface2: #222228;
-  --lc-border: rgba(255,255,255,0.08);
-  --lc-border2: rgba(255,255,255,0.14);
-  --lc-text: #F0EFF5;
-  --lc-muted: #8A8A9A;
-  --lc-accent-purple: #7F77DD;
-  --lc-accent-teal: #1D9E75;
-  --lc-accent-amber: #EF9F27;
-  --lc-accent-coral: #D85A30;
-  --lc-radius: 14px;
-  --lc-radius-sm: 8px;
-}
-#lc-root {
-  background: var(--lc-bg);
-  min-height: 600px;
-  font-family: var(--font-sans, system-ui, sans-serif);
-  color: var(--lc-text);
-  position: relative;
-  overflow: hidden;
-  border: 0.5px solid var(--lc-border2);
-}
-.lc-screen { display: none; flex-direction: column; min-height: 600px; }
-.lc-screen.active { display: flex; }
+<div id="app">
 
-.lc-topbar {
-  padding: 20px 20px 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-}
-.lc-logo {
-  font-size: 15px;
-  font-weight: 500;
-  letter-spacing: 0.04em;
-  color: var(--lc-text);
-  opacity: 0.9;
-}
-.lc-logo span { color: var(--lc-accent-purple); }
-.lc-date-badge {
-  font-size: 12px;
-  color: var(--lc-muted);
-  background: var(--lc-surface);
-  border: 0.5px solid var(--lc-border);
-  border-radius: 20px;
-  padding: 4px 12px;
-}
-.lc-scroll {
-  flex: 1;
-  overflow-y: auto;
-  padding: 16px 20px 80px;
-  scrollbar-width: none;
-}
-.lc-scroll::-webkit-scrollbar { display: none; }
-
-/* Dashboard */
-.lc-greeting { font-size: 22px; font-weight: 500; margin-bottom: 4px; }
-.lc-sub { font-size: 14px; color: var(--lc-muted); margin-bottom: 20px; }
-
-.lc-streak-row {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-.lc-streak-card {
-  flex: 1;
-  background: var(--lc-surface);
-  border: 0.5px solid var(--lc-border);
-  border-radius: var(--lc-radius-sm);
-  padding: 12px;
-  text-align: center;
-}
-.lc-streak-num { font-size: 22px; font-weight: 500; }
-.lc-streak-lbl { font-size: 11px; color: var(--lc-muted); margin-top: 2px; }
-.streak-purple { color: var(--lc-accent-purple); }
-.streak-teal { color: var(--lc-accent-teal); }
-.streak-amber { color: var(--lc-accent-amber); }
-
-.lc-section-label {
-  font-size: 11px;
-  color: var(--lc-muted);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  margin-bottom: 12px;
-  margin-top: 24px;
-}
-.lc-card {
-  background: var(--lc-surface);
-  border: 0.5px solid var(--lc-border);
-  border-radius: var(--lc-radius);
-  padding: 16px;
-  margin-bottom: 12px;
-  cursor: pointer;
-  transition: border-color 0.2s, background 0.2s;
-}
-.lc-card:hover { border-color: var(--lc-border2); background: var(--lc-surface2); }
-.lc-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-.lc-card-title-row { display: flex; align-items: center; gap: 10px; }
-.lc-card-icon {
-  width: 34px; height: 34px; border-radius: 10px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 16px;
-}
-.icon-purple { background: rgba(127,119,221,0.15); color: var(--lc-accent-purple); }
-.icon-teal { background: rgba(29,158,117,0.15); color: var(--lc-accent-teal); }
-.icon-amber { background: rgba(239,159,39,0.15); color: var(--lc-accent-amber); }
-.lc-card-name { font-size: 15px; font-weight: 500; }
-.lc-card-stat { font-size: 13px; color: var(--lc-muted); }
-.lc-progress-bar {
-  height: 4px;
-  background: rgba(255,255,255,0.07);
-  border-radius: 4px;
-  overflow: hidden;
-}
-.lc-progress-fill {
-  height: 100%;
-  border-radius: 4px;
-  transition: width 0.6s ease;
-}
-.fill-purple { background: var(--lc-accent-purple); }
-.fill-teal { background: var(--lc-accent-teal); }
-.fill-amber { background: var(--lc-accent-amber); }
-
-.lc-week-row {
-  display: flex; gap: 6px; margin-bottom: 20px;
-}
-.lc-day-dot {
-  flex: 1; height: 32px; border-radius: 6px;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  gap: 3px;
-  background: var(--lc-surface); border: 0.5px solid var(--lc-border);
-  font-size: 9px; color: var(--lc-muted);
-}
-.lc-day-dot .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--lc-border); }
-.lc-day-dot.done .dot { background: var(--lc-accent-teal); }
-.lc-day-dot.today { border-color: var(--lc-accent-purple); }
-.lc-day-dot.today .dot { background: var(--lc-accent-purple); }
-
-/* Treinos */
-.lc-exercise-item {
-  background: var(--lc-surface);
-  border: 0.5px solid var(--lc-border);
-  border-radius: var(--lc-radius-sm);
-  padding: 14px;
-  margin-bottom: 10px;
-  display: flex; align-items: center; justify-content: space-between;
-}
-.lc-ex-left { display: flex; flex-direction: column; gap: 3px; }
-.lc-ex-name { font-size: 14px; font-weight: 500; }
-.lc-ex-meta { font-size: 12px; color: var(--lc-muted); }
-.lc-ex-right { display: flex; align-items: center; gap: 8px; }
-.lc-counter-btn {
-  width: 28px; height: 28px; border-radius: 8px;
-  background: var(--lc-surface2); border: 0.5px solid var(--lc-border);
-  color: var(--lc-text); font-size: 16px; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: background 0.15s;
-}
-.lc-counter-btn:hover { background: rgba(127,119,221,0.2); }
-.lc-counter-val { font-size: 14px; font-weight: 500; min-width: 28px; text-align: center; }
-.lc-done-badge {
-  font-size: 10px; padding: 3px 8px; border-radius: 20px;
-  background: rgba(29,158,117,0.15); color: var(--lc-accent-teal);
-  border: 0.5px solid rgba(29,158,117,0.3);
-}
-
-/* Estudos */
-.lc-study-item {
-  background: var(--lc-surface);
-  border: 0.5px solid var(--lc-border);
-  border-radius: var(--lc-radius-sm);
-  padding: 14px;
-  margin-bottom: 10px;
-}
-.lc-study-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
-.lc-study-name { font-size: 14px; font-weight: 500; }
-.lc-timer-btn {
-  font-size: 12px; padding: 4px 10px; border-radius: 20px;
-  background: rgba(127,119,221,0.12); color: var(--lc-accent-purple);
-  border: 0.5px solid rgba(127,119,221,0.3);
-  cursor: pointer; transition: background 0.15s;
-}
-.lc-timer-btn:hover { background: rgba(127,119,221,0.25); }
-.lc-timer-btn.running { background: rgba(29,158,117,0.12); color: var(--lc-accent-teal); border-color: rgba(29,158,117,0.3); }
-.lc-study-progress { display: flex; align-items: center; gap: 10px; }
-.lc-study-pct { font-size: 12px; color: var(--lc-muted); min-width: 32px; text-align: right; }
-.lc-timer-display { font-size: 11px; color: var(--lc-muted); margin-top: 4px; }
-
-/* Rotina */
-.lc-routine-item {
-  background: var(--lc-surface);
-  border: 0.5px solid var(--lc-border);
-  border-radius: var(--lc-radius-sm);
-  padding: 14px;
-  margin-bottom: 10px;
-  display: flex; align-items: center; gap: 14px;
-  cursor: pointer; transition: background 0.15s;
-}
-.lc-routine-item:hover { background: var(--lc-surface2); }
-.lc-check {
-  width: 22px; height: 22px; border-radius: 6px;
-  border: 1.5px solid var(--lc-border2);
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0; transition: all 0.2s;
-}
-.lc-check.checked { background: var(--lc-accent-teal); border-color: var(--lc-accent-teal); }
-.lc-routine-text { flex: 1; }
-.lc-routine-name { font-size: 14px; font-weight: 500; }
-.lc-routine-meta { font-size: 12px; color: var(--lc-muted); margin-top: 2px; }
-.lc-routine-item.checked-item .lc-routine-name { opacity: 0.4; text-decoration: line-through; }
-
-/* Histórico */
-.lc-hist-day {
-  background: var(--lc-surface);
-  border: 0.5px solid var(--lc-border);
-  border-radius: var(--lc-radius-sm);
-  padding: 14px;
-  margin-bottom: 10px;
-}
-.lc-hist-day-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-.lc-hist-date { font-size: 13px; font-weight: 500; }
-.lc-hist-pct {
-  font-size: 12px; padding: 2px 8px; border-radius: 20px;
-}
-.pct-high { background: rgba(29,158,117,0.15); color: var(--lc-accent-teal); }
-.pct-mid { background: rgba(239,159,39,0.12); color: var(--lc-accent-amber); }
-.pct-low { background: rgba(216,90,48,0.12); color: var(--lc-accent-coral); }
-.lc-hist-bars { display: flex; gap: 8px; }
-.lc-hist-bar-item { flex: 1; }
-.lc-hist-bar-label { font-size: 10px; color: var(--lc-muted); margin-bottom: 4px; }
-.lc-hist-bar-track { height: 4px; background: rgba(255,255,255,0.07); border-radius: 4px; overflow: hidden; }
-.lc-hist-bar-fill { height: 100%; border-radius: 4px; }
-
-/* Bottom Nav */
-.lc-bottom-nav {
-  position: absolute; bottom: 0; left: 0; right: 0;
-  background: rgba(14,14,16,0.95);
-  border-top: 0.5px solid var(--lc-border);
-  display: flex;
-  padding: 12px 0 16px;
-  backdrop-filter: blur(10px);
-}
-.lc-nav-btn {
-  flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px;
-  cursor: pointer; padding: 4px; transition: opacity 0.15s;
-  background: none; border: none; color: var(--lc-muted);
-}
-.lc-nav-btn.active { color: var(--lc-accent-purple); }
-.lc-nav-btn i { font-size: 20px; }
-.lc-nav-label { font-size: 10px; }
-
-/* Page header */
-.lc-page-header {
-  display: flex; align-items: center; gap: 12px;
-  padding: 20px 20px 0;
-}
-.lc-back-btn {
-  width: 32px; height: 32px; border-radius: 8px;
-  background: var(--lc-surface); border: 0.5px solid var(--lc-border);
-  color: var(--lc-text); cursor: pointer;
-  display: flex; align-items: center; justify-content: center; font-size: 16px;
-}
-.lc-page-title { font-size: 18px; font-weight: 500; }
-.lc-page-icon { font-size: 18px; }
-
-.lc-add-btn {
-  margin-left: auto;
-  width: 32px; height: 32px; border-radius: 8px;
-  background: rgba(127,119,221,0.15); border: 0.5px solid rgba(127,119,221,0.3);
-  color: var(--lc-accent-purple); cursor: pointer;
-  display: flex; align-items: center; justify-content: center; font-size: 18px;
-}
-.lc-progress-summary {
-  display: flex; align-items: center; gap: 12px;
-  background: var(--lc-surface); border: 0.5px solid var(--lc-border);
-  border-radius: var(--lc-radius-sm); padding: 12px 16px;
-  margin-bottom: 16px;
-}
-.lc-ps-num { font-size: 22px; font-weight: 500; color: var(--lc-accent-purple); }
-.lc-ps-sub { font-size: 12px; color: var(--lc-muted); }
-.lc-ps-bar { flex: 1; height: 4px; background: rgba(255,255,255,0.07); border-radius: 4px; overflow: hidden; }
-.lc-ps-fill { height: 100%; border-radius: 4px; background: var(--lc-accent-purple); }
-</style>
-<div id="lc-root">
-
-  <!-- DASHBOARD -->
-  <div id="screen-dash" class="lc-screen active">
-    <div class="lc-topbar">
-      <div class="lc-logo">List<span>Control</span></div>
-      <div class="lc-date-badge" id="lc-date"></div>
-    </div>
-    <div class="lc-scroll">
-      <div class="lc-greeting">Bom dia, Jud 👋</div>
-      <div class="lc-sub">Hoje é um bom dia para manter a sequência.</div>
-      <div class="lc-section-label">Esta semana</div>
-      <div class="lc-week-row" id="lc-week"></div>
-      <div class="lc-section-label">Sequência</div>
-      <div class="lc-streak-row">
-        <div class="lc-streak-card">
-          <div class="lc-streak-num streak-purple">12</div>
-          <div class="lc-streak-lbl">dias seguidos</div>
-        </div>
-        <div class="lc-streak-card">
-          <div class="lc-streak-num streak-teal" id="dash-pct">74%</div>
-          <div class="lc-streak-lbl">hoje concluído</div>
-        </div>
-        <div class="lc-streak-card">
-          <div class="lc-streak-num streak-amber">86%</div>
-          <div class="lc-streak-lbl">média semanal</div>
-        </div>
-      </div>
-      <div class="lc-section-label">Módulos de hoje</div>
-      <div class="lc-card" onclick="goTo('treinos')">
-        <div class="lc-card-header">
-          <div class="lc-card-title-row">
-            <div class="lc-card-icon icon-purple"><i class="ti ti-barbell" aria-hidden="true"></i></div>
-            <div>
-              <div class="lc-card-name">Treinos</div>
-              <div class="lc-card-stat" id="dash-treino-stat">3 de 5 exercícios</div>
-            </div>
-          </div>
-          <i class="ti ti-chevron-right" style="color:var(--lc-muted);font-size:16px" aria-hidden="true"></i>
-        </div>
-        <div class="lc-progress-bar"><div class="lc-progress-fill fill-purple" id="dash-treino-bar" style="width:60%"></div></div>
-      </div>
-      <div class="lc-card" onclick="goTo('estudos')">
-        <div class="lc-card-header">
-          <div class="lc-card-title-row">
-            <div class="lc-card-icon icon-teal"><i class="ti ti-book" aria-hidden="true"></i></div>
-            <div>
-              <div class="lc-card-name">Estudos</div>
-              <div class="lc-card-stat" id="dash-estudos-stat">2h 10min de sessão</div>
-            </div>
-          </div>
-          <i class="ti ti-chevron-right" style="color:var(--lc-muted);font-size:16px" aria-hidden="true"></i>
-        </div>
-        <div class="lc-progress-bar"><div class="lc-progress-fill fill-teal" id="dash-estudos-bar" style="width:55%"></div></div>
-      </div>
-      <div class="lc-card" onclick="goTo('rotina')">
-        <div class="lc-card-header">
-          <div class="lc-card-title-row">
-            <div class="lc-card-icon icon-amber"><i class="ti ti-list-check" aria-hidden="true"></i></div>
-            <div>
-              <div class="lc-card-name">Rotina</div>
-              <div class="lc-card-stat" id="dash-rotina-stat">8 de 10 itens</div>
-            </div>
-          </div>
-          <i class="ti ti-chevron-right" style="color:var(--lc-muted);font-size:16px" aria-hidden="true"></i>
-        </div>
-        <div class="lc-progress-bar"><div class="lc-progress-fill fill-amber" id="dash-rotina-bar" style="width:80%"></div></div>
+  <!-- ======================== DASHBOARD ======================== -->
+  <div id="screen-dash" class="screen active">
+    <div class="topbar">
+      <div class="logo">List<span>Control</span></div>
+      <div class="topbar-right">
+        <div class="date-badge" id="lc-date"></div>
+        <button class="icon-btn" onclick="openSettings()" aria-label="Configurações">
+          <i class="ti ti-settings"></i>
+        </button>
       </div>
     </div>
-    <div class="lc-bottom-nav">
-      <button class="lc-nav-btn active" onclick="goTo('dash')"><i class="ti ti-home" aria-hidden="true"></i><span class="lc-nav-label">Início</span></button>
-      <button class="lc-nav-btn" onclick="goTo('treinos')"><i class="ti ti-barbell" aria-hidden="true"></i><span class="lc-nav-label">Treinos</span></button>
-      <button class="lc-nav-btn" onclick="goTo('estudos')"><i class="ti ti-book" aria-hidden="true"></i><span class="lc-nav-label">Estudos</span></button>
-      <button class="lc-nav-btn" onclick="goTo('rotina')"><i class="ti ti-list-check" aria-hidden="true"></i><span class="lc-nav-label">Rotina</span></button>
-      <button class="lc-nav-btn" onclick="goTo('historico')"><i class="ti ti-chart-bar" aria-hidden="true"></i><span class="lc-nav-label">Histórico</span></button>
+    <div class="scroll-area">
+      <div class="greeting" id="dash-greeting">Bom dia!</div>
+      <div class="sub-text" id="dash-quote">Hoje é um bom dia para manter a sequência.</div>
+
+      <!-- Métricas rápidas -->
+      <div class="metrics-row">
+        <div class="metric-card">
+          <div class="metric-num purple" id="dash-streak">12</div>
+          <div class="metric-lbl">dias seguidos</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-num teal" id="dash-pct">0%</div>
+          <div class="metric-lbl">concluído hoje</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-num amber" id="dash-avg">86%</div>
+          <div class="metric-lbl">média semanal</div>
+        </div>
+      </div>
+
+      <!-- Semana -->
+      <div class="section-label">Esta semana</div>
+      <div class="week-row" id="lc-week"></div>
+
+      <!-- Cards de módulos -->
+      <div class="section-label">Módulos de hoje</div>
+      <div class="module-card" onclick="goTo('treinos')">
+        <div class="module-card-left">
+          <div class="mod-icon purple-icon"><i class="ti ti-barbell"></i></div>
+          <div>
+            <div class="module-name">Treinos</div>
+            <div class="module-stat" id="dash-treino-stat">0 de 0 exercícios</div>
+          </div>
+        </div>
+        <div class="module-card-right">
+          <div class="mini-ring" id="ring-treino">
+            <svg viewBox="0 0 36 36"><circle cx="18" cy="18" r="14" class="ring-bg"/><circle cx="18" cy="18" r="14" class="ring-fill purple-ring" id="ring-treino-fill" stroke-dasharray="0 88"/></svg>
+            <span class="ring-pct" id="ring-treino-pct">0%</span>
+          </div>
+          <i class="ti ti-chevron-right chev"></i>
+        </div>
+      </div>
+      <div class="module-card" onclick="goTo('estudos')">
+        <div class="module-card-left">
+          <div class="mod-icon teal-icon"><i class="ti ti-book"></i></div>
+          <div>
+            <div class="module-name">Estudos</div>
+            <div class="module-stat" id="dash-estudos-stat">0h 0m estudados</div>
+          </div>
+        </div>
+        <div class="module-card-right">
+          <div class="mini-ring" id="ring-estudo">
+            <svg viewBox="0 0 36 36"><circle cx="18" cy="18" r="14" class="ring-bg"/><circle cx="18" cy="18" r="14" class="ring-fill teal-ring" id="ring-estudo-fill" stroke-dasharray="0 88"/></svg>
+            <span class="ring-pct" id="ring-estudo-pct">0%</span>
+          </div>
+          <i class="ti ti-chevron-right chev"></i>
+        </div>
+      </div>
+      <div class="module-card" onclick="goTo('rotina')">
+        <div class="module-card-left">
+          <div class="mod-icon amber-icon"><i class="ti ti-list-check"></i></div>
+          <div>
+            <div class="module-name">Rotina</div>
+            <div class="module-stat" id="dash-rotina-stat">0 de 0 itens</div>
+          </div>
+        </div>
+        <div class="module-card-right">
+          <div class="mini-ring">
+            <svg viewBox="0 0 36 36"><circle cx="18" cy="18" r="14" class="ring-bg"/><circle cx="18" cy="18" r="14" class="ring-fill amber-ring" id="ring-rotina-fill" stroke-dasharray="0 88"/></svg>
+            <span class="ring-pct" id="ring-rotina-pct">0%</span>
+          </div>
+          <i class="ti ti-chevron-right chev"></i>
+        </div>
+      </div>
+
+      <!-- Motivacional -->
+      <div class="quote-card" id="dash-motivation">
+        <i class="ti ti-flame"></i>
+        <span id="quote-text">Carregando...</span>
+      </div>
     </div>
+    <nav class="bottom-nav">
+      <button class="nav-btn active" onclick="goTo('dash')" aria-label="Início"><i class="ti ti-home"></i><span>Início</span></button>
+      <button class="nav-btn" onclick="goTo('treinos')" aria-label="Treinos"><i class="ti ti-barbell"></i><span>Treinos</span></button>
+      <button class="nav-btn" onclick="goTo('estudos')" aria-label="Estudos"><i class="ti ti-book"></i><span>Estudos</span></button>
+      <button class="nav-btn" onclick="goTo('rotina')" aria-label="Rotina"><i class="ti ti-list-check"></i><span>Rotina</span></button>
+      <button class="nav-btn" onclick="goTo('historico')" aria-label="Histórico"><i class="ti ti-chart-bar"></i><span>Histórico</span></button>
+    </nav>
   </div>
 
-  <!-- TREINOS -->
-  <div id="screen-treinos" class="lc-screen">
-    <div class="lc-page-header">
-      <button class="lc-back-btn" onclick="goTo('dash')" aria-label="Voltar"><i class="ti ti-arrow-left" aria-hidden="true"></i></button>
-      <div class="lc-page-icon" style="color:var(--lc-accent-purple)"><i class="ti ti-barbell" aria-hidden="true"></i></div>
-      <div class="lc-page-title">Treinos</div>
-      <button class="lc-add-btn" onclick="addExercise()" aria-label="Adicionar exercício"><i class="ti ti-plus" aria-hidden="true"></i></button>
+  <!-- ======================== TREINOS ======================== -->
+  <div id="screen-treinos" class="screen">
+    <div class="page-header">
+      <button class="back-btn" onclick="goTo('dash')" aria-label="Voltar"><i class="ti ti-arrow-left"></i></button>
+      <div class="page-header-title">
+        <div class="mod-icon purple-icon sm"><i class="ti ti-barbell"></i></div>
+        <span>Treinos</span>
+      </div>
+      <button class="add-btn purple-add" onclick="openAddExercise()" aria-label="Adicionar exercício"><i class="ti ti-plus"></i></button>
     </div>
-    <div class="lc-scroll">
-      <div class="lc-progress-summary">
-        <div><div class="lc-ps-num" id="ex-done-count">3</div><div class="lc-ps-sub">concluídos</div></div>
-        <div class="lc-ps-bar"><div class="lc-ps-fill" id="ex-bar" style="width:60%"></div></div>
-        <div style="font-size:12px;color:var(--lc-muted)"><span id="ex-total-count">5</span> total</div>
+    <div class="scroll-area">
+      <div class="progress-summary">
+        <div>
+          <div class="ps-num purple" id="ex-done">0</div>
+          <div class="ps-lbl">concluídos</div>
+        </div>
+        <div class="ps-bar-wrap">
+          <div class="ps-bar"><div class="ps-fill purple-fill" id="ex-bar"></div></div>
+        </div>
+        <div class="ps-right">
+          <span id="ex-total">0</span> <span class="ps-lbl">total</span>
+        </div>
       </div>
       <div id="exercise-list"></div>
+      <div class="empty-state" id="ex-empty">
+        <i class="ti ti-barbell"></i>
+        <p>Nenhum exercício ainda.<br/>Toque em <strong>+</strong> para adicionar.</p>
+      </div>
     </div>
-    <div class="lc-bottom-nav">
-      <button class="lc-nav-btn" onclick="goTo('dash')"><i class="ti ti-home" aria-hidden="true"></i><span class="lc-nav-label">Início</span></button>
-      <button class="lc-nav-btn active" onclick="goTo('treinos')"><i class="ti ti-barbell" aria-hidden="true"></i><span class="lc-nav-label">Treinos</span></button>
-      <button class="lc-nav-btn" onclick="goTo('estudos')"><i class="ti ti-book" aria-hidden="true"></i><span class="lc-nav-label">Estudos</span></button>
-      <button class="lc-nav-btn" onclick="goTo('rotina')"><i class="ti ti-list-check" aria-hidden="true"></i><span class="lc-nav-label">Rotina</span></button>
-      <button class="lc-nav-btn" onclick="goTo('historico')"><i class="ti ti-chart-bar" aria-hidden="true"></i><span class="lc-nav-label">Histórico</span></button>
-    </div>
+    <nav class="bottom-nav">
+      <button class="nav-btn" onclick="goTo('dash')" aria-label="Início"><i class="ti ti-home"></i><span>Início</span></button>
+      <button class="nav-btn active" onclick="goTo('treinos')" aria-label="Treinos"><i class="ti ti-barbell"></i><span>Treinos</span></button>
+      <button class="nav-btn" onclick="goTo('estudos')" aria-label="Estudos"><i class="ti ti-book"></i><span>Estudos</span></button>
+      <button class="nav-btn" onclick="goTo('rotina')" aria-label="Rotina"><i class="ti ti-list-check"></i><span>Rotina</span></button>
+      <button class="nav-btn" onclick="goTo('historico')" aria-label="Histórico"><i class="ti ti-chart-bar"></i><span>Histórico</span></button>
+    </nav>
   </div>
 
-  <!-- ESTUDOS -->
-  <div id="screen-estudos" class="lc-screen">
-    <div class="lc-page-header">
-      <button class="lc-back-btn" onclick="goTo('dash')" aria-label="Voltar"><i class="ti ti-arrow-left" aria-hidden="true"></i></button>
-      <div class="lc-page-icon" style="color:var(--lc-accent-teal)"><i class="ti ti-book" aria-hidden="true"></i></div>
-      <div class="lc-page-title">Estudos</div>
-      <button class="lc-add-btn" onclick="addStudy()" aria-label="Adicionar matéria"><i class="ti ti-plus" aria-hidden="true"></i></button>
+  <!-- ======================== ESTUDOS ======================== -->
+  <div id="screen-estudos" class="screen">
+    <div class="page-header">
+      <button class="back-btn" onclick="goTo('dash')" aria-label="Voltar"><i class="ti ti-arrow-left"></i></button>
+      <div class="page-header-title">
+        <div class="mod-icon teal-icon sm"><i class="ti ti-book"></i></div>
+        <span>Estudos</span>
+      </div>
+      <button class="add-btn teal-add" onclick="openAddStudy()" aria-label="Adicionar matéria"><i class="ti ti-plus"></i></button>
     </div>
-    <div class="lc-scroll">
-      <div class="lc-progress-summary" style="--lc-accent-purple:var(--lc-accent-teal)">
-        <div><div class="lc-ps-num" style="color:var(--lc-accent-teal)" id="study-time-total">2h 10m</div><div class="lc-ps-sub">estudados hoje</div></div>
-        <div class="lc-ps-bar"><div class="lc-ps-fill" style="background:var(--lc-accent-teal)" id="study-bar" style="width:55%"></div></div>
-        <div style="font-size:12px;color:var(--lc-muted)"><span id="study-pct-total">55%</span></div>
+    <div class="scroll-area">
+      <div class="progress-summary">
+        <div>
+          <div class="ps-num teal" id="study-time">0/0</div>
+          <div class="ps-lbl">concluídas</div>
+        </div>
+        <div class="ps-bar-wrap">
+          <div class="ps-bar"><div class="ps-fill teal-fill" id="study-bar"></div></div>
+        </div>
+        <div class="ps-right">
+          <span id="study-pct">0%</span>
+        </div>
       </div>
       <div id="study-list"></div>
+      <div class="empty-state" id="study-empty">
+        <i class="ti ti-book"></i>
+        <p>Nenhuma matéria ainda.<br/>Toque em <strong>+</strong> para adicionar.</p>
+      </div>
     </div>
-    <div class="lc-bottom-nav">
-      <button class="lc-nav-btn" onclick="goTo('dash')"><i class="ti ti-home" aria-hidden="true"></i><span class="lc-nav-label">Início</span></button>
-      <button class="lc-nav-btn" onclick="goTo('treinos')"><i class="ti ti-barbell" aria-hidden="true"></i><span class="lc-nav-label">Treinos</span></button>
-      <button class="lc-nav-btn active" onclick="goTo('estudos')"><i class="ti ti-book" aria-hidden="true"></i><span class="lc-nav-label">Estudos</span></button>
-      <button class="lc-nav-btn" onclick="goTo('rotina')"><i class="ti ti-list-check" aria-hidden="true"></i><span class="lc-nav-label">Rotina</span></button>
-      <button class="lc-nav-btn" onclick="goTo('historico')"><i class="ti ti-chart-bar" aria-hidden="true"></i><span class="lc-nav-label">Histórico</span></button>
-    </div>
+    <nav class="bottom-nav">
+      <button class="nav-btn" onclick="goTo('dash')" aria-label="Início"><i class="ti ti-home"></i><span>Início</span></button>
+      <button class="nav-btn" onclick="goTo('treinos')" aria-label="Treinos"><i class="ti ti-barbell"></i><span>Treinos</span></button>
+      <button class="nav-btn active" onclick="goTo('estudos')" aria-label="Estudos"><i class="ti ti-book"></i><span>Estudos</span></button>
+      <button class="nav-btn" onclick="goTo('rotina')" aria-label="Rotina"><i class="ti ti-list-check"></i><span>Rotina</span></button>
+      <button class="nav-btn" onclick="goTo('historico')" aria-label="Histórico"><i class="ti ti-chart-bar"></i><span>Histórico</span></button>
+    </nav>
   </div>
 
-  <!-- ROTINA -->
-  <div id="screen-rotina" class="lc-screen">
-    <div class="lc-page-header">
-      <button class="lc-back-btn" onclick="goTo('dash')" aria-label="Voltar"><i class="ti ti-arrow-left" aria-hidden="true"></i></button>
-      <div class="lc-page-icon" style="color:var(--lc-accent-amber)"><i class="ti ti-list-check" aria-hidden="true"></i></div>
-      <div class="lc-page-title">Rotina</div>
-      <button class="lc-add-btn" onclick="addRoutine()" aria-label="Adicionar item"><i class="ti ti-plus" aria-hidden="true"></i></button>
+  <!-- ======================== ROTINA ======================== -->
+  <div id="screen-rotina" class="screen">
+    <div class="page-header">
+      <button class="back-btn" onclick="goTo('dash')" aria-label="Voltar"><i class="ti ti-arrow-left"></i></button>
+      <div class="page-header-title">
+        <div class="mod-icon amber-icon sm"><i class="ti ti-list-check"></i></div>
+        <span>Rotina</span>
+      </div>
+      <button class="add-btn amber-add" onclick="openAddRoutine()" aria-label="Adicionar item"><i class="ti ti-plus"></i></button>
     </div>
-    <div class="lc-scroll">
-      <div class="lc-progress-summary">
-        <div><div class="lc-ps-num" style="color:var(--lc-accent-amber)" id="routine-done">8</div><div class="lc-ps-sub">concluídos</div></div>
-        <div class="lc-ps-bar"><div class="lc-ps-fill" style="background:var(--lc-accent-amber)" id="routine-bar" style="width:80%"></div></div>
-        <div style="font-size:12px;color:var(--lc-muted)"><span id="routine-total">10</span> total</div>
+    <div class="scroll-area">
+      <div class="progress-summary">
+        <div>
+          <div class="ps-num amber" id="routine-done">0</div>
+          <div class="ps-lbl">feitos</div>
+        </div>
+        <div class="ps-bar-wrap">
+          <div class="ps-bar"><div class="ps-fill amber-fill" id="routine-bar"></div></div>
+        </div>
+        <div class="ps-right">
+          <span id="routine-total">0</span> <span class="ps-lbl">total</span>
+        </div>
       </div>
       <div id="routine-list"></div>
+      <div class="empty-state" id="routine-empty">
+        <i class="ti ti-list-check"></i>
+        <p>Nenhum item na rotina.<br/>Toque em <strong>+</strong> para adicionar.</p>
+      </div>
     </div>
-    <div class="lc-bottom-nav">
-      <button class="lc-nav-btn" onclick="goTo('dash')"><i class="ti ti-home" aria-hidden="true"></i><span class="lc-nav-label">Início</span></button>
-      <button class="lc-nav-btn" onclick="goTo('treinos')"><i class="ti ti-barbell" aria-hidden="true"></i><span class="lc-nav-label">Treinos</span></button>
-      <button class="lc-nav-btn" onclick="goTo('estudos')"><i class="ti ti-book" aria-hidden="true"></i><span class="lc-nav-label">Estudos</span></button>
-      <button class="lc-nav-btn active" onclick="goTo('rotina')"><i class="ti ti-list-check" aria-hidden="true"></i><span class="lc-nav-label">Rotina</span></button>
-      <button class="lc-nav-btn" onclick="goTo('historico')"><i class="ti ti-chart-bar" aria-hidden="true"></i><span class="lc-nav-label">Histórico</span></button>
+    <nav class="bottom-nav">
+      <button class="nav-btn" onclick="goTo('dash')" aria-label="Início"><i class="ti ti-home"></i><span>Início</span></button>
+      <button class="nav-btn" onclick="goTo('treinos')" aria-label="Treinos"><i class="ti ti-barbell"></i><span>Treinos</span></button>
+      <button class="nav-btn" onclick="goTo('estudos')" aria-label="Estudos"><i class="ti ti-book"></i><span>Estudos</span></button>
+      <button class="nav-btn active" onclick="goTo('rotina')" aria-label="Rotina"><i class="ti ti-list-check"></i><span>Rotina</span></button>
+      <button class="nav-btn" onclick="goTo('historico')" aria-label="Histórico"><i class="ti ti-chart-bar"></i><span>Histórico</span></button>
+    </nav>
+  </div>
+
+  <!-- ======================== HISTÓRICO ======================== -->
+  <div id="screen-historico" class="screen">
+    <div class="page-header">
+      <button class="back-btn" onclick="goTo('dash')" aria-label="Voltar"><i class="ti ti-arrow-left"></i></button>
+      <div class="page-header-title">
+        <div class="mod-icon purple-icon sm"><i class="ti ti-chart-bar"></i></div>
+        <span>Histórico</span>
+      </div>
+      <button class="add-btn purple-add" onclick="exportData()" aria-label="Exportar dados" title="Exportar JSON">
+        <i class="ti ti-download"></i>
+      </button>
+    </div>
+    <div class="scroll-area">
+      <div class="metrics-row">
+        <div class="metric-card">
+          <div class="metric-num purple" id="hist-streak">12</div>
+          <div class="metric-lbl">sequência atual</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-num teal" id="hist-best">23</div>
+          <div class="metric-lbl">melhor sequência</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-num amber" id="hist-total-days">0</div>
+          <div class="metric-lbl">dias registrados</div>
+        </div>
+      </div>
+      <div class="section-label">Últimos 7 dias</div>
+      <div id="hist-list"></div>
+    </div>
+    <nav class="bottom-nav">
+      <button class="nav-btn" onclick="goTo('dash')" aria-label="Início"><i class="ti ti-home"></i><span>Início</span></button>
+      <button class="nav-btn" onclick="goTo('treinos')" aria-label="Treinos"><i class="ti ti-barbell"></i><span>Treinos</span></button>
+      <button class="nav-btn" onclick="goTo('estudos')" aria-label="Estudos"><i class="ti ti-book"></i><span>Estudos</span></button>
+      <button class="nav-btn" onclick="goTo('rotina')" aria-label="Rotina"><i class="ti ti-list-check"></i><span>Rotina</span></button>
+      <button class="nav-btn active" onclick="goTo('historico')" aria-label="Histórico"><i class="ti ti-chart-bar"></i><span>Histórico</span></button>
+    </nav>
+  </div>
+
+  <!-- ======================== CONFIGURAÇÕES ======================== -->
+  <div id="screen-settings" class="screen">
+    <div class="page-header">
+      <button class="back-btn" onclick="goTo('dash')" aria-label="Voltar"><i class="ti ti-arrow-left"></i></button>
+      <div class="page-header-title">
+        <div class="mod-icon purple-icon sm"><i class="ti ti-settings"></i></div>
+        <span>Configurações</span>
+      </div>
+    </div>
+    <div class="scroll-area">
+      <div class="section-label">Perfil</div>
+      <div class="settings-card">
+        <div class="setting-row">
+          <label>Nome</label>
+          <input type="text" id="cfg-name" placeholder="Seu nome" maxlength="30" />
+        </div>
+        <div class="setting-row">
+          <label>Saudação</label>
+          <select id="cfg-greeting">
+            <option value="auto">Automática (dia/tarde/noite)</option>
+            <option value="Bom dia">Bom dia sempre</option>
+            <option value="Boa tarde">Boa tarde sempre</option>
+            <option value="Olá">Olá</option>
+          </select>
+        </div>
+      </div>
+      <div class="section-label">Aparência</div>
+      <div class="settings-card">
+        <div class="setting-row">
+          <label>Cor de destaque</label>
+          <div class="accent-picker">
+            <button class="accent-opt active" data-accent="purple" style="background:#7F77DD" aria-label="Roxo"></button>
+            <button class="accent-opt" data-accent="teal" style="background:#1D9E75" aria-label="Verde"></button>
+            <button class="accent-opt" data-accent="blue" style="background:#378ADD" aria-label="Azul"></button>
+            <button class="accent-opt" data-accent="coral" style="background:#D85A30" aria-label="Coral"></button>
+            <button class="accent-opt" data-accent="pink" style="background:#D4537E" aria-label="Rosa"></button>
+          </div>
+        </div>
+        <div class="setting-row">
+          <label>Fonte maior</label>
+          <label class="toggle-switch">
+            <input type="checkbox" id="cfg-font-large" />
+            <span class="toggle-track"></span>
+          </label>
+        </div>
+      </div>
+      <div class="section-label">Notificações</div>
+      <div class="settings-card">
+        <div class="setting-row">
+          <label>Horário de revisão</label>
+          <input type="time" id="cfg-review-time" value="21:00" />
+        </div>
+        <div class="setting-row">
+          <label>Lembrete ativo</label>
+          <label class="toggle-switch">
+            <input type="checkbox" id="cfg-notif" checked />
+            <span class="toggle-track"></span>
+          </label>
+        </div>
+      </div>
+      <div class="section-label">Dados</div>
+      <div class="settings-card">
+        <button class="action-btn teal-action" onclick="exportData()"><i class="ti ti-download"></i> Exportar dados (JSON)</button>
+        <button class="action-btn red-action" onclick="confirmReset()"><i class="ti ti-trash"></i> Resetar dados do dia</button>
+      </div>
+      <button class="save-btn" onclick="saveSettings()"><i class="ti ti-check"></i> Salvar configurações</button>
+    </div>
+    <nav class="bottom-nav">
+      <button class="nav-btn" onclick="goTo('dash')" aria-label="Início"><i class="ti ti-home"></i><span>Início</span></button>
+      <button class="nav-btn" onclick="goTo('treinos')" aria-label="Treinos"><i class="ti ti-barbell"></i><span>Treinos</span></button>
+      <button class="nav-btn" onclick="goTo('estudos')" aria-label="Estudos"><i class="ti ti-book"></i><span>Estudos</span></button>
+      <button class="nav-btn" onclick="goTo('rotina')" aria-label="Rotina"><i class="ti ti-list-check"></i><span>Rotina</span></button>
+      <button class="nav-btn" onclick="goTo('historico')" aria-label="Histórico"><i class="ti ti-chart-bar"></i><span>Histórico</span></button>
+    </nav>
+  </div>
+
+  <!-- ======================== MODAIS ======================== -->
+
+  <!-- Modal: Adicionar Exercício -->
+  <div class="modal-overlay" id="modal-exercise">
+    <div class="modal">
+      <div class="modal-header">
+        <span id="modal-ex-title">Adicionar exercício</span>
+        <button class="modal-close" onclick="closeModal('modal-exercise')" aria-label="Fechar"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="modal-body">
+        <label class="field-label">Nome do exercício</label>
+        <input type="text" id="ex-name-input" placeholder="ex: Supino reto" maxlength="40" />
+        <label class="field-label">Séries planejadas</label>
+        <div class="num-row">
+          <button class="num-btn" onclick="adjField('ex-series-input',-1)">−</button>
+          <input type="number" id="ex-series-input" value="4" min="1" max="20" />
+          <button class="num-btn" onclick="adjField('ex-series-input',1)">+</button>
+        </div>
+        <label class="field-label">Duração estimada (min)</label>
+        <div class="num-row">
+          <button class="num-btn" onclick="adjField('ex-min-input',-5)">−</button>
+          <input type="number" id="ex-min-input" value="15" min="1" max="120" />
+          <button class="num-btn" onclick="adjField('ex-min-input',5)">+</button>
+        </div>
+        <label class="field-label">Observação (opcional)</label>
+        <input type="text" id="ex-note-input" placeholder="ex: 70kg, descanso 90s" maxlength="60" />
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" onclick="closeModal('modal-exercise')">Cancelar</button>
+        <button class="btn-confirm purple-confirm" onclick="confirmExercise()">Salvar</button>
+      </div>
     </div>
   </div>
 
-  <!-- HISTÓRICO -->
-  <div id="screen-historico" class="lc-screen">
-    <div class="lc-page-header">
-      <button class="lc-back-btn" onclick="goTo('dash')" aria-label="Voltar"><i class="ti ti-arrow-left" aria-hidden="true"></i></button>
-      <div class="lc-page-icon" style="color:var(--lc-accent-purple)"><i class="ti ti-chart-bar" aria-hidden="true"></i></div>
-      <div class="lc-page-title">Histórico</div>
-    </div>
-    <div class="lc-scroll">
-      <div class="lc-streak-row" style="margin-bottom:16px">
-        <div class="lc-streak-card">
-          <div class="lc-streak-num streak-purple">12</div>
-          <div class="lc-streak-lbl">sequência atual</div>
-        </div>
-        <div class="lc-streak-card">
-          <div class="lc-streak-num streak-teal">23</div>
-          <div class="lc-streak-lbl">melhor sequência</div>
-        </div>
+  <!-- Modal: Adicionar Estudo -->
+  <div class="modal-overlay" id="modal-study">
+    <div class="modal">
+      <div class="modal-header">
+        <span id="modal-study-title">Adicionar matéria</span>
+        <button class="modal-close" onclick="closeModal('modal-study')" aria-label="Fechar"><i class="ti ti-x"></i></button>
       </div>
-      <div class="lc-section-label">Últimos 7 dias</div>
-      <div id="hist-list"></div>
-    </div>
-    <div class="lc-bottom-nav">
-      <button class="lc-nav-btn" onclick="goTo('dash')"><i class="ti ti-home" aria-hidden="true"></i><span class="lc-nav-label">Início</span></button>
-      <button class="lc-nav-btn" onclick="goTo('treinos')"><i class="ti ti-barbell" aria-hidden="true"></i><span class="lc-nav-label">Treinos</span></button>
-      <button class="lc-nav-btn" onclick="goTo('estudos')"><i class="ti ti-book" aria-hidden="true"></i><span class="lc-nav-label">Estudos</span></button>
-      <button class="lc-nav-btn" onclick="goTo('rotina')"><i class="ti ti-list-check" aria-hidden="true"></i><span class="lc-nav-label">Rotina</span></button>
-      <button class="lc-nav-btn active" onclick="goTo('historico')"><i class="ti ti-chart-bar" aria-hidden="true"></i><span class="lc-nav-label">Histórico</span></button>
+      <div class="modal-body">
+        <label class="field-label">Nome da matéria</label>
+        <input type="text" id="study-name-input" placeholder="ex: Inglês" maxlength="40" />
+        <label class="field-label">Tempo planejado (min)</label>
+        <div class="num-row">
+          <button class="num-btn" onclick="adjField('study-target-input',-5)">−</button>
+          <input type="number" id="study-target-input" value="60" min="5" max="480" />
+          <button class="num-btn" onclick="adjField('study-target-input',5)">+</button>
+        </div>
+        <label class="field-label">Observação (opcional)</label>
+        <input type="text" id="study-note-input" placeholder="ex: Duolingo + podcast" maxlength="60" />
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" onclick="closeModal('modal-study')">Cancelar</button>
+        <button class="btn-confirm teal-confirm" onclick="confirmStudy()">Salvar</button>
+      </div>
     </div>
   </div>
+
+  <!-- Modal: Adicionar Rotina -->
+  <div class="modal-overlay" id="modal-routine">
+    <div class="modal">
+      <div class="modal-header">
+        <span id="modal-routine-title">Adicionar item</span>
+        <button class="modal-close" onclick="closeModal('modal-routine')" aria-label="Fechar"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="modal-body">
+        <label class="field-label">Nome do item</label>
+        <input type="text" id="routine-name-input" placeholder="ex: Meditação" maxlength="40" />
+        <label class="field-label">Ícone</label>
+        <div class="icon-picker" id="routine-icon-picker"></div>
+        <label class="field-label">Horário (opcional)</label>
+        <input type="time" id="routine-time-input" />
+        <label class="field-label">Recorrência</label>
+        <select id="routine-recur-input">
+          <option value="diário">Diário</option>
+          <option value="dias úteis">Dias úteis</option>
+          <option value="fins de semana">Fins de semana</option>
+          <option value="semanal">Semanal</option>
+        </select>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" onclick="closeModal('modal-routine')">Cancelar</button>
+        <button class="btn-confirm amber-confirm" onclick="confirmRoutine()">Salvar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Confirmar exclusão -->
+  <div class="modal-overlay" id="modal-confirm">
+    <div class="modal modal-sm">
+      <div class="modal-header">
+        <span id="confirm-title">Confirmar</span>
+        <button class="modal-close" onclick="closeModal('modal-confirm')" aria-label="Fechar"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="modal-body">
+        <p id="confirm-msg" style="font-size:14px;color:var(--muted);line-height:1.6"></p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" onclick="closeModal('modal-confirm')">Cancelar</button>
+        <button class="btn-confirm red-confirm" id="confirm-ok-btn">Confirmar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
 
 </div>
 
-<script>
-const screens = ['dash','treinos','estudos','rotina','historico'];
-function goTo(id) {
-  screens.forEach(s => {
-    document.getElementById('screen-'+s).classList.toggle('active', s === id);
-  });
-}
-
-const days = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
-const today = new Date();
-const dayNames = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
-document.getElementById('lc-date').textContent = today.toLocaleDateString('pt-BR', {weekday:'short', day:'numeric', month:'short'});
-
-const weekEl = document.getElementById('lc-week');
-const doneDays = [0,1,2,3,4];
-for(let i=0; i<7; i++) {
-  const d = new Date(today); d.setDate(today.getDate() - (6-i));
-  const isToday = i===6;
-  const isDone = doneDays.includes(i) && !isToday;
-  const div = document.createElement('div');
-  div.className = 'lc-day-dot' + (isDone?' done':'') + (isToday?' today':'');
-  div.innerHTML = `<span>${dayNames[d.getDay()]}</span><div class="dot"></div>`;
-  weekEl.appendChild(div);
-}
-
-let exercises = [
-  {name:'Supino', series:4, done:3, min:20},
-  {name:'Agachamento', series:4, done:4, min:25},
-  {name:'Remada', series:3, done:3, min:15},
-  {name:'Desenvolvimento', series:3, done:2, min:12},
-  {name:'Rosca direta', series:3, done:0, min:10},
-];
-function renderExercises() {
-  const el = document.getElementById('exercise-list');
-  const total = exercises.length;
-  const done = exercises.filter(e=>e.done>=e.series).length;
-  el.innerHTML = exercises.map((e,i)=>{
-    const isDone = e.done >= e.series;
-    return `<div class="lc-exercise-item">
-      <div class="lc-ex-left">
-        <div class="lc-ex-name">${e.name}</div>
-        <div class="lc-ex-meta">${e.series} séries · ${e.min} min</div>
-      </div>
-      <div class="lc-ex-right">
-        ${isDone ? '<span class="lc-done-badge"><i class="ti ti-check" aria-hidden="true"></i> Feito</span>' : `
-        <button class="lc-counter-btn" onclick="changeEx(${i},-1)" aria-label="Diminuir">−</button>
-        <span class="lc-counter-val" style="color:${e.done>0?'var(--lc-accent-purple)':'var(--lc-muted)'}">${e.done}/${e.series}</span>
-        <button class="lc-counter-btn" onclick="changeEx(${i},1)" aria-label="Aumentar">+</button>
-        `}
-      </div>
-    </div>`;
-  }).join('');
-  document.getElementById('ex-done-count').textContent = done;
-  document.getElementById('ex-total-count').textContent = total;
-  document.getElementById('ex-bar').style.width = Math.round(done/total*100)+'%';
-  document.getElementById('dash-treino-stat').textContent = done+' de '+total+' exercícios';
-  document.getElementById('dash-treino-bar').style.width = Math.round(done/total*100)+'%';
-  updateDashPct();
-}
-function changeEx(i, delta) {
-  exercises[i].done = Math.max(0, Math.min(exercises[i].series, exercises[i].done+delta));
-  renderExercises();
-}
-function addExercise() {
-  const names = ['Flexão','Leg press','Pull-down','Tríceps corda','Abdominais'];
-  const n = names[exercises.length % names.length];
-  exercises.push({name:n, series:3, done:0, min:10});
-  renderExercises();
-}
-
-let studyTimers = {};
-let studies = [
-  {name:'Inglês', target:60, done:45, pct:75},
-  {name:'Programação', target:90, done:55, pct:61},
-  {name:'Matemática', target:60, done:20, pct:33},
-  {name:'Português', target:30, done:30, pct:100},
-];
-function formatSecs(s){ return Math.floor(s/60)+'m '+String(s%60).padStart(2,'0')+'s'; }
-function renderStudies() {
-  const el = document.getElementById('study-list');
-  let totalDone = studies.reduce((a,s)=>a+s.done,0);
-  let totalTarget = studies.reduce((a,s)=>a+s.target,0);
-  const pct = Math.round(totalDone/totalTarget*100);
-  const h = Math.floor(totalDone/60), m = totalDone%60;
-  document.getElementById('study-time-total').textContent = (h>0?h+'h ':'')+m+'m';
-  document.getElementById('study-pct-total').textContent = pct+'%';
-  document.getElementById('study-bar').style.width = pct+'%';
-  document.getElementById('dash-estudos-stat').textContent = (h>0?h+'h ':'')+m+'m de sessão';
-  document.getElementById('dash-estudos-bar').style.width = pct+'%';
-  updateDashPct();
-  el.innerHTML = studies.map((s,i)=>{
-    const running = studyTimers[i] != null;
-    return `<div class="lc-study-item">
-      <div class="lc-study-header">
-        <div class="lc-study-name">${s.name}</div>
-        <button class="lc-timer-btn ${running?'running':''}" onclick="toggleTimer(${i})">${running?'<i class="ti ti-player-pause" aria-hidden="true"></i> Pausar':'<i class="ti ti-player-play" aria-hidden="true"></i> Iniciar'}</button>
-      </div>
-      <div class="lc-study-progress">
-        <div class="lc-progress-bar" style="flex:1"><div class="lc-progress-fill fill-teal" style="width:${s.pct}%"></div></div>
-        <span class="lc-study-pct">${s.pct}%</span>
-      </div>
-      <div class="lc-timer-display">${s.done} min · meta ${s.target} min</div>
-    </div>`;
-  }).join('');
-}
-function toggleTimer(i) {
-  if(studyTimers[i]) {
-    clearInterval(studyTimers[i]);
-    studyTimers[i] = null;
-  } else {
-    studyTimers[i] = setInterval(()=>{
-      if(studies[i].done < studies[i].target){
-        studies[i].done++;
-        studies[i].pct = Math.round(studies[i].done/studies[i].target*100);
-        renderStudies();
-      } else {
-        clearInterval(studyTimers[i]); studyTimers[i]=null; renderStudies();
-      }
-    }, 2000);
-  }
-  renderStudies();
-}
-function addStudy() {
-  const names=['História','Física','Química','Filosofia','Biologia'];
-  studies.push({name:names[studies.length%names.length],target:45,done:0,pct:0});
-  renderStudies();
-}
-
-let routine = [
-  {name:'Meditação', meta:'10 min · diário', done:true},
-  {name:'Leitura', meta:'20 min · diário', done:true},
-  {name:'Água', meta:'2L · diário', done:true},
-  {name:'Exercício', meta:'Conforme plano', done:true},
-  {name:'Vitaminas', meta:'Manhã · diário', done:true},
-  {name:'Diário', meta:'Noite · diário', done:true},
-  {name:'Revisão do dia', meta:'Noite · diário', done:true},
-  {name:'Sem tela 21h', meta:'Noite · diário', done:true},
-  {name:'Cold shower', meta:'Manhã · diário', done:false},
-  {name:'Planejar amanhã', meta:'Noite · diário', done:false},
-];
-function renderRoutine() {
-  const el = document.getElementById('routine-list');
-  const done = routine.filter(r=>r.done).length;
-  const total = routine.length;
-  document.getElementById('routine-done').textContent = done;
-  document.getElementById('routine-total').textContent = total;
-  document.getElementById('routine-bar').style.width = Math.round(done/total*100)+'%';
-  document.getElementById('dash-rotina-stat').textContent = done+' de '+total+' itens';
-  document.getElementById('dash-rotina-bar').style.width = Math.round(done/total*100)+'%';
-  updateDashPct();
-  el.innerHTML = routine.map((r,i)=>`
-    <div class="lc-routine-item ${r.done?'checked-item':''}" onclick="toggleRoutine(${i})">
-      <div class="lc-check ${r.done?'checked':''}">
-        ${r.done?'<i class="ti ti-check" style="font-size:14px;color:#fff" aria-hidden="true"></i>':''}
-      </div>
-      <div class="lc-routine-text">
-        <div class="lc-routine-name">${r.name}</div>
-        <div class="lc-routine-meta">${r.meta}</div>
-      </div>
-    </div>
-  `).join('');
-}
-function toggleRoutine(i) {
-  routine[i].done = !routine[i].done;
-  renderRoutine();
-}
-function addRoutine() {
-  const items=['Alongamento','Journaling','Gratidão','Sem açúcar','Limpeza'];
-  routine.push({name:items[routine.length%items.length],meta:'Diário',done:false});
-  renderRoutine();
-}
-
-function updateDashPct(){
-  const exP = exercises.filter(e=>e.done>=e.series).length/exercises.length;
-  const stP = studies.reduce((a,s)=>a+s.pct,0)/(studies.length*100);
-  const roP = routine.filter(r=>r.done).length/routine.length;
-  const total = Math.round((exP+stP+roP)/3*100);
-  document.getElementById('dash-pct').textContent = total+'%';
-}
-
-const histData = [
-  {date:'Sex, 6 jun', treinos:80, estudos:90, rotina:100, pct:90},
-  {date:'Sáb, 7 jun', treinos:100, estudos:60, rotina:80, pct:80},
-  {date:'Dom, 8 jun', treinos:60, estudos:100, rotina:70, pct:77},
-  {date:'Seg, 9 jun', treinos:100, estudos:80, rotina:90, pct:90},
-  {date:'Ter, 10 jun', treinos:80, estudos:70, rotina:100, pct:83},
-  {date:'Qua, 11 jun', treinos:100, estudos:90, rotina:80, pct:90},
-  {date:'Hoje', treinos:60, estudos:55, rotina:80, pct:65},
-];
-function renderHist(){
-  const el = document.getElementById('hist-list');
-  el.innerHTML = histData.slice().reverse().map(d=>{
-    const cls = d.pct>=80?'pct-high':d.pct>=60?'pct-mid':'pct-low';
-    return `<div class="lc-hist-day">
-      <div class="lc-hist-day-header">
-        <span class="lc-hist-date">${d.date}</span>
-        <span class="lc-hist-pct ${cls}">${d.pct}%</span>
-      </div>
-      <div class="lc-hist-bars">
-        <div class="lc-hist-bar-item"><div class="lc-hist-bar-label">Treinos</div><div class="lc-hist-bar-track"><div class="lc-hist-bar-fill fill-purple" style="width:${d.treinos}%"></div></div></div>
-        <div class="lc-hist-bar-item"><div class="lc-hist-bar-label">Estudos</div><div class="lc-hist-bar-track"><div class="lc-hist-bar-fill fill-teal" style="width:${d.estudos}%"></div></div></div>
-        <div class="lc-hist-bar-item"><div class="lc-hist-bar-label">Rotina</div><div class="lc-hist-bar-track"><div class="lc-hist-bar-fill fill-amber" style="width:${d.rotina}%"></div></div></div>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-renderExercises();
-renderStudies();
-renderRoutine();
-renderHist();
-</script>
+<script src="app.js"></script>
+</body>
+</html>
