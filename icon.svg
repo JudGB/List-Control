@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Fundo escuro com borda sutil -->
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1A1828;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0E0E10;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#9B94F0;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#6058C8;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#242232;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1C1A28;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="softGlow">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <clipPath id="roundedClip">
+      <rect width="512" height="512" rx="112" ry="112"/>
+    </clipPath>
+  </defs>
+
+  <!-- Base com clip arredondado -->
+  <g clip-path="url(#roundedClip)">
+    <!-- Fundo principal -->
+    <rect width="512" height="512" fill="url(#bgGrad)"/>
+
+    <!-- Glow roxo suave no centro -->
+    <ellipse cx="256" cy="240" rx="180" ry="160" fill="#7F77DD" opacity="0.07"/>
+
+    <!-- Card interno -->
+    <rect x="64" y="72" width="384" height="368" rx="48" fill="url(#cardGrad)" opacity="0.9"/>
+    <rect x="64" y="72" width="384" height="368" rx="48" fill="none" stroke="#7F77DD" stroke-width="1" opacity="0.2"/>
+
+    <!-- Linha decorativa topo do card -->
+    <rect x="64" y="72" width="384" height="4" rx="2" fill="url(#accentGrad)" opacity="0.6"/>
+
+    <!-- Três barras de checklist - item 1 (concluído) -->
+    <rect x="120" y="152" width="18" height="18" rx="5" fill="#7F77DD" opacity="0.9"/>
+    <polyline points="124,161 128,165 136,157" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect x="152" y="156" width="170" height="10" rx="5" fill="#7F77DD" opacity="0.5"/>
+    <rect x="152" y="156" width="100" height="10" rx="5" fill="#7F77DD" opacity="0.8"/>
+
+    <!-- Três barras de checklist - item 2 (concluído) -->
+    <rect x="120" y="196" width="18" height="18" rx="5" fill="#1D9E75" opacity="0.9"/>
+    <polyline points="124,205 128,209 136,201" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect x="152" y="200" width="170" height="10" rx="5" fill="#1D9E75" opacity="0.3"/>
+    <rect x="152" y="200" width="140" height="10" rx="5" fill="#1D9E75" opacity="0.7"/>
+
+    <!-- Três barras de checklist - item 3 (pendente) -->
+    <rect x="120" y="240" width="18" height="18" rx="5" fill="none" stroke="#555568" stroke-width="2"/>
+    <rect x="152" y="244" width="170" height="10" rx="5" fill="#333345" opacity="0.8"/>
+    <rect x="152" y="244" width="80" height="10" rx="5" fill="#EF9F27" opacity="0.5"/>
+
+    <!-- Divisor -->
+    <rect x="96" y="288" width="320" height="1" fill="#7F77DD" opacity="0.12"/>
+
+    <!-- Texto LC monograma grande -->
+    <text
+      x="256"
+      y="378"
+      font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif"
+      font-size="96"
+      font-weight="800"
+      letter-spacing="-4"
+      fill="url(#accentGrad)"
+      text-anchor="middle"
+      filter="url(#softGlow)"
+      opacity="0.95">LC</text>
+
+    <!-- Ponto decorativo roxo brilhante -->
+    <circle cx="256" cy="396" r="3" fill="#7F77DD" opacity="0.6"/>
+    <circle cx="240" cy="396" r="2" fill="#7F77DD" opacity="0.3"/>
+    <circle cx="272" cy="396" r="2" fill="#7F77DD" opacity="0.3"/>
+
+  </g>
+</svg>
