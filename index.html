@@ -6,375 +6,353 @@
   <meta name="theme-color" content="#0E0E10" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="mobile-web-app-capable" content="yes" />
   <title>ListControl</title>
   <link rel="manifest" href="manifest.json" />
   <link rel="icon" type="image/svg+xml" href="icon.svg" />
   <link rel="apple-touch-icon" href="icon.svg" />
-  <meta name="application-name" content="ListControl" />
-  <meta name="mobile-web-app-capable" content="yes" />
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" />
 </head>
 <body>
-
 <div id="app">
 
-  <!-- ======================== DASHBOARD ======================== -->
+  <!-- ═══════════════════════════════════════════
+       DASHBOARD
+  ═══════════════════════════════════════════ -->
   <div id="screen-dash" class="screen active">
     <div class="topbar">
       <div class="logo">List<span>Control</span></div>
       <div class="topbar-right">
         <div class="date-badge" id="lc-date"></div>
-        <button class="icon-btn" onclick="openSettings()" aria-label="Configurações">
-          <i class="ti ti-settings"></i>
-        </button>
+        <button class="icon-btn" onclick="openSettings()" aria-label="Configurações"><i class="ti ti-settings"></i></button>
       </div>
     </div>
     <div class="scroll-area">
-      <div class="greeting" id="dash-greeting">Bom dia!</div>
-      <div class="sub-text" id="dash-quote">Hoje é um bom dia para manter a sequência.</div>
+      <div class="greeting" id="dash-greeting">Bom dia! 👋</div>
+      <div class="sub-text">Hoje é um bom dia para manter a sequência.</div>
 
-      <!-- Métricas rápidas -->
-      <div class="metrics-row">
-        <div class="metric-card">
-          <div class="metric-num purple" id="dash-streak">12</div>
-          <div class="metric-lbl">dias seguidos</div>
+      <div class="section-label">Sequência</div>
+      <div class="streak-row">
+        <div class="streak-card">
+          <div class="streak-num purple" id="dash-streak">0</div>
+          <div class="streak-lbl">dias seguidos</div>
+          <div class="streak-sub" id="dash-best">melhor: 0 dias</div>
         </div>
-        <div class="metric-card">
-          <div class="metric-num teal" id="dash-pct">0%</div>
-          <div class="metric-lbl">concluído hoje</div>
-        </div>
-        <div class="metric-card">
-          <div class="metric-num amber" id="dash-avg">86%</div>
-          <div class="metric-lbl">média semanal</div>
+        <div class="streak-card">
+          <div class="streak-num teal" id="dash-pct">0%</div>
+          <div class="streak-lbl">concluído hoje</div>
+          <div class="streak-sub" id="dash-avg">média: —</div>
         </div>
       </div>
 
-      <!-- Semana -->
-      <div class="section-label">Esta semana</div>
-      <div class="week-row" id="lc-week"></div>
+      <div class="week-bar-card">
+        <div class="week-bar-header">
+          <span class="week-bar-title">Esta semana</span>
+        </div>
+        <div class="week-strip" id="lc-week"></div>
+      </div>
 
-      <!-- Cards de módulos -->
       <div class="section-label">Módulos de hoje</div>
+
       <div class="module-card" onclick="goTo('treinos')">
-        <div class="module-card-left">
+        <div class="module-left">
           <div class="mod-icon purple-icon"><i class="ti ti-barbell"></i></div>
-          <div>
-            <div class="module-name">Treinos</div>
-            <div class="module-stat" id="dash-treino-stat">0 de 0 exercícios</div>
+          <div class="mod-info">
+            <div class="mod-name">Treinos</div>
+            <div class="mod-stat" id="dash-treino-stat">0 de 0 exercícios</div>
           </div>
         </div>
-        <div class="module-card-right">
-          <div class="mini-ring" id="ring-treino">
-            <svg viewBox="0 0 36 36"><circle cx="18" cy="18" r="14" class="ring-bg"/><circle cx="18" cy="18" r="14" class="ring-fill purple-ring" id="ring-treino-fill" stroke-dasharray="0 88"/></svg>
-            <span class="ring-pct" id="ring-treino-pct">0%</span>
-          </div>
-          <i class="ti ti-chevron-right chev"></i>
-        </div>
-      </div>
-      <div class="module-card" onclick="goTo('estudos')">
-        <div class="module-card-left">
-          <div class="mod-icon teal-icon"><i class="ti ti-book"></i></div>
-          <div>
-            <div class="module-name">Estudos</div>
-            <div class="module-stat" id="dash-estudos-stat">0h 0m estudados</div>
-          </div>
-        </div>
-        <div class="module-card-right">
-          <div class="mini-ring" id="ring-estudo">
-            <svg viewBox="0 0 36 36"><circle cx="18" cy="18" r="14" class="ring-bg"/><circle cx="18" cy="18" r="14" class="ring-fill teal-ring" id="ring-estudo-fill" stroke-dasharray="0 88"/></svg>
-            <span class="ring-pct" id="ring-estudo-pct">0%</span>
-          </div>
-          <i class="ti ti-chevron-right chev"></i>
-        </div>
-      </div>
-      <div class="module-card" onclick="goTo('rotina')">
-        <div class="module-card-left">
-          <div class="mod-icon amber-icon"><i class="ti ti-list-check"></i></div>
-          <div>
-            <div class="module-name">Rotina</div>
-            <div class="module-stat" id="dash-rotina-stat">0 de 0 itens</div>
-          </div>
-        </div>
-        <div class="module-card-right">
+        <div class="module-right">
           <div class="mini-ring">
-            <svg viewBox="0 0 36 36"><circle cx="18" cy="18" r="14" class="ring-bg"/><circle cx="18" cy="18" r="14" class="ring-fill amber-ring" id="ring-rotina-fill" stroke-dasharray="0 88"/></svg>
-            <span class="ring-pct" id="ring-rotina-pct">0%</span>
+            <svg viewBox="0 0 36 36"><circle cx="18" cy="18" r="13" class="ring-bg"/><circle cx="18" cy="18" r="13" class="ring-fill" stroke="var(--purple)" id="ring-ex-fill" stroke-dasharray="0 82"/></svg>
+            <span class="ring-pct" id="ring-ex-pct">0%</span>
           </div>
           <i class="ti ti-chevron-right chev"></i>
         </div>
       </div>
 
-      <!-- Motivacional -->
-      <div class="quote-card" id="dash-motivation">
+      <div class="module-card" onclick="goTo('estudos')">
+        <div class="module-left">
+          <div class="mod-icon teal-icon"><i class="ti ti-book"></i></div>
+          <div class="mod-info">
+            <div class="mod-name">Estudos</div>
+            <div class="mod-stat" id="dash-estudos-stat">0 matérias hoje</div>
+          </div>
+        </div>
+        <div class="module-right">
+          <div class="mini-ring">
+            <svg viewBox="0 0 36 36"><circle cx="18" cy="18" r="13" class="ring-bg"/><circle cx="18" cy="18" r="13" class="ring-fill" stroke="var(--teal)" id="ring-st-fill" stroke-dasharray="0 82"/></svg>
+            <span class="ring-pct" id="ring-st-pct">0%</span>
+          </div>
+          <i class="ti ti-chevron-right chev"></i>
+        </div>
+      </div>
+
+      <div class="module-card" onclick="goTo('rotina')">
+        <div class="module-left">
+          <div class="mod-icon amber-icon"><i class="ti ti-list-check"></i></div>
+          <div class="mod-info">
+            <div class="mod-name">Rotina</div>
+            <div class="mod-stat" id="dash-rotina-stat">0 de 0 itens</div>
+          </div>
+        </div>
+        <div class="module-right">
+          <div class="mini-ring">
+            <svg viewBox="0 0 36 36"><circle cx="18" cy="18" r="13" class="ring-bg"/><circle cx="18" cy="18" r="13" class="ring-fill" stroke="var(--amber)" id="ring-ro-fill" stroke-dasharray="0 82"/></svg>
+            <span class="ring-pct" id="ring-ro-pct">0%</span>
+          </div>
+          <i class="ti ti-chevron-right chev"></i>
+        </div>
+      </div>
+
+      <div class="quote-card">
         <i class="ti ti-flame"></i>
         <span id="quote-text">Carregando...</span>
       </div>
     </div>
     <nav class="bottom-nav">
-      <button class="nav-btn active" onclick="goTo('dash')" aria-label="Início"><i class="ti ti-home"></i><span>Início</span></button>
-      <button class="nav-btn" onclick="goTo('treinos')" aria-label="Treinos"><i class="ti ti-barbell"></i><span>Treinos</span></button>
-      <button class="nav-btn" onclick="goTo('estudos')" aria-label="Estudos"><i class="ti ti-book"></i><span>Estudos</span></button>
-      <button class="nav-btn" onclick="goTo('rotina')" aria-label="Rotina"><i class="ti ti-list-check"></i><span>Rotina</span></button>
-      <button class="nav-btn" onclick="goTo('historico')" aria-label="Histórico"><i class="ti ti-chart-bar"></i><span>Histórico</span></button>
+      <button id="nav-dash" class="nav-btn active" onclick="goTo('dash')"><i class="ti ti-home"></i><span>Início</span></button>
+      <button id="nav-treinos" class="nav-btn" onclick="goTo('treinos')"><i class="ti ti-barbell"></i><span>Treinos</span></button>
+      <button id="nav-estudos" class="nav-btn" onclick="goTo('estudos')"><i class="ti ti-book"></i><span>Estudos</span></button>
+      <button id="nav-rotina" class="nav-btn" onclick="goTo('rotina')"><i class="ti ti-list-check"></i><span>Rotina</span></button>
+      <button id="nav-hist" class="nav-btn" onclick="goTo('historico')"><i class="ti ti-chart-bar"></i><span>Histórico</span></button>
     </nav>
   </div>
 
-  <!-- ======================== TREINOS ======================== -->
+  <!-- ═══════════════════════════════════════════
+       TREINOS
+  ═══════════════════════════════════════════ -->
   <div id="screen-treinos" class="screen">
     <div class="page-header">
-      <button class="back-btn" onclick="goTo('dash')" aria-label="Voltar"><i class="ti ti-arrow-left"></i></button>
-      <div class="page-header-title">
-        <div class="mod-icon purple-icon sm"><i class="ti ti-barbell"></i></div>
-        <span>Treinos</span>
-      </div>
-      <button class="add-btn purple-add" onclick="openAddExercise()" aria-label="Adicionar exercício"><i class="ti ti-plus"></i></button>
+      <button class="back-btn" onclick="goTo('dash')"><i class="ti ti-arrow-left"></i></button>
+      <div class="page-title"><div class="mod-icon purple-icon sm"><i class="ti ti-barbell"></i></div>Treinos</div>
+      <button class="add-btn purple-add" onclick="openAddExercise()"><i class="ti ti-plus"></i></button>
     </div>
     <div class="scroll-area">
       <div class="progress-summary">
-        <div>
-          <div class="ps-num purple" id="ex-done">0</div>
-          <div class="ps-lbl">concluídos</div>
-        </div>
-        <div class="ps-bar-wrap">
-          <div class="ps-bar"><div class="ps-fill purple-fill" id="ex-bar"></div></div>
-        </div>
-        <div class="ps-right">
-          <span id="ex-total">0</span> <span class="ps-lbl">total</span>
-        </div>
+        <div><div class="ps-num purple" id="ex-done-count">0</div><div class="ps-lbl">feitos</div></div>
+        <div class="ps-bar-wrap"><div class="ps-bar"><div class="ps-fill purple-fill" id="ex-bar"></div></div></div>
+        <div class="ps-right"><span id="ex-total-count">0</span> <span class="ps-lbl">total</span></div>
       </div>
       <div id="exercise-list"></div>
-      <div class="empty-state" id="ex-empty">
-        <i class="ti ti-barbell"></i>
-        <p>Nenhum exercício ainda.<br/>Toque em <strong>+</strong> para adicionar.</p>
-      </div>
+      <div class="empty-state" id="ex-empty"><i class="ti ti-barbell"></i><p>Nenhum exercício.<br/>Toque em <strong>+</strong> para adicionar.</p></div>
+      <button class="mark-all-btn" onclick="markAllExercises()"><i class="ti ti-checks"></i> Marcar tudo como feito</button>
     </div>
     <nav class="bottom-nav">
-      <button class="nav-btn" onclick="goTo('dash')" aria-label="Início"><i class="ti ti-home"></i><span>Início</span></button>
-      <button class="nav-btn active" onclick="goTo('treinos')" aria-label="Treinos"><i class="ti ti-barbell"></i><span>Treinos</span></button>
-      <button class="nav-btn" onclick="goTo('estudos')" aria-label="Estudos"><i class="ti ti-book"></i><span>Estudos</span></button>
-      <button class="nav-btn" onclick="goTo('rotina')" aria-label="Rotina"><i class="ti ti-list-check"></i><span>Rotina</span></button>
-      <button class="nav-btn" onclick="goTo('historico')" aria-label="Histórico"><i class="ti ti-chart-bar"></i><span>Histórico</span></button>
+      <button id="nav-dash" class="nav-btn" onclick="goTo('dash')"><i class="ti ti-home"></i><span>Início</span></button>
+      <button class="nav-btn active"><i class="ti ti-barbell"></i><span>Treinos</span></button>
+      <button class="nav-btn" onclick="goTo('estudos')"><i class="ti ti-book"></i><span>Estudos</span></button>
+      <button class="nav-btn" onclick="goTo('rotina')"><i class="ti ti-list-check"></i><span>Rotina</span></button>
+      <button class="nav-btn" onclick="goTo('historico')"><i class="ti ti-chart-bar"></i><span>Histórico</span></button>
     </nav>
   </div>
 
-  <!-- ======================== ESTUDOS ======================== -->
+  <!-- ═══════════════════════════════════════════
+       ESTUDOS
+  ═══════════════════════════════════════════ -->
   <div id="screen-estudos" class="screen">
     <div class="page-header">
-      <button class="back-btn" onclick="goTo('dash')" aria-label="Voltar"><i class="ti ti-arrow-left"></i></button>
-      <div class="page-header-title">
-        <div class="mod-icon teal-icon sm"><i class="ti ti-book"></i></div>
-        <span>Estudos</span>
-      </div>
-      <button class="add-btn teal-add" onclick="openAddStudy()" aria-label="Adicionar matéria"><i class="ti ti-plus"></i></button>
+      <button class="back-btn" onclick="goTo('dash')"><i class="ti ti-arrow-left"></i></button>
+      <div class="page-title"><div class="mod-icon teal-icon sm"><i class="ti ti-book"></i></div>Estudos</div>
+      <button class="add-btn teal-add" onclick="studyAddAction()"><i class="ti ti-plus"></i></button>
     </div>
     <div class="scroll-area">
-      <div class="progress-summary">
-        <div>
-          <div class="ps-num teal" id="study-time">0/0</div>
-          <div class="ps-lbl">concluídas</div>
-        </div>
-        <div class="ps-bar-wrap">
-          <div class="ps-bar"><div class="ps-fill teal-fill" id="study-bar"></div></div>
-        </div>
-        <div class="ps-right">
-          <span id="study-pct">0%</span>
-        </div>
+      <!-- Sub-tabs -->
+      <div class="sub-tabs">
+        <button class="study-sub-tab active" data-tab="hoje" onclick="renderStudyTab('hoje')">Hoje</button>
+        <button class="study-sub-tab" data-tab="semanal" onclick="renderStudyTab('semanal')">Plano Semanal</button>
+        <button class="study-sub-tab" data-tab="prova" onclick="renderStudyTab('prova')">Prova</button>
       </div>
-      <div id="study-list"></div>
-      <div class="empty-state" id="study-empty">
-        <i class="ti ti-book"></i>
-        <p>Nenhuma matéria ainda.<br/>Toque em <strong>+</strong> para adicionar.</p>
+
+      <!-- Hoje -->
+      <div class="study-pane" data-pane="hoje">
+        <div class="progress-summary">
+          <div><div class="ps-num teal" id="study-done-count">0</div><div class="ps-lbl">feitas</div></div>
+          <div class="ps-bar-wrap"><div class="ps-bar"><div class="ps-fill teal-fill" id="study-bar"></div></div></div>
+          <div class="ps-right"><span id="study-total-count">0</span> <span class="ps-lbl">total</span></div>
+        </div>
+        <div id="study-today-list"></div>
+        <div class="empty-state" id="study-today-empty"><i class="ti ti-book"></i><p>Nenhuma matéria para hoje.<br/>Configure no <strong>Plano Semanal</strong>.</p></div>
+      </div>
+
+      <!-- Semanal -->
+      <div class="study-pane" data-pane="semanal" style="display:none">
+        <div class="day-tabs" id="week-day-tabs"></div>
+        <div id="week-day-content"></div>
+        <button class="mark-all-btn teal-mark" onclick="openAddWeekItem()"><i class="ti ti-plus"></i> Adicionar neste dia</button>
+      </div>
+
+      <!-- Prova -->
+      <div class="study-pane" data-pane="prova" style="display:none">
+        <div id="prova-list"></div>
+        <div class="empty-state" id="prova-empty"><i class="ti ti-calendar-event"></i><p>Nenhuma prova cadastrada.<br/>Toque em <strong>+</strong> para adicionar.</p></div>
+        <button class="mark-all-btn amber-mark" onclick="openAddProva()"><i class="ti ti-plus"></i> Nova prova / concurso</button>
       </div>
     </div>
     <nav class="bottom-nav">
-      <button class="nav-btn" onclick="goTo('dash')" aria-label="Início"><i class="ti ti-home"></i><span>Início</span></button>
-      <button class="nav-btn" onclick="goTo('treinos')" aria-label="Treinos"><i class="ti ti-barbell"></i><span>Treinos</span></button>
-      <button class="nav-btn active" onclick="goTo('estudos')" aria-label="Estudos"><i class="ti ti-book"></i><span>Estudos</span></button>
-      <button class="nav-btn" onclick="goTo('rotina')" aria-label="Rotina"><i class="ti ti-list-check"></i><span>Rotina</span></button>
-      <button class="nav-btn" onclick="goTo('historico')" aria-label="Histórico"><i class="ti ti-chart-bar"></i><span>Histórico</span></button>
+      <button class="nav-btn" onclick="goTo('dash')"><i class="ti ti-home"></i><span>Início</span></button>
+      <button class="nav-btn" onclick="goTo('treinos')"><i class="ti ti-barbell"></i><span>Treinos</span></button>
+      <button class="nav-btn active"><i class="ti ti-book"></i><span>Estudos</span></button>
+      <button class="nav-btn" onclick="goTo('rotina')"><i class="ti ti-list-check"></i><span>Rotina</span></button>
+      <button class="nav-btn" onclick="goTo('historico')"><i class="ti ti-chart-bar"></i><span>Histórico</span></button>
     </nav>
   </div>
 
-  <!-- ======================== ROTINA ======================== -->
+  <!-- ═══════════════════════════════════════════
+       ROTINA
+  ═══════════════════════════════════════════ -->
   <div id="screen-rotina" class="screen">
     <div class="page-header">
-      <button class="back-btn" onclick="goTo('dash')" aria-label="Voltar"><i class="ti ti-arrow-left"></i></button>
-      <div class="page-header-title">
-        <div class="mod-icon amber-icon sm"><i class="ti ti-list-check"></i></div>
-        <span>Rotina</span>
-      </div>
-      <button class="add-btn amber-add" onclick="openAddRoutine()" aria-label="Adicionar item"><i class="ti ti-plus"></i></button>
+      <button class="back-btn" onclick="goTo('dash')"><i class="ti ti-arrow-left"></i></button>
+      <div class="page-title"><div class="mod-icon amber-icon sm"><i class="ti ti-list-check"></i></div>Rotina</div>
+      <button class="add-btn amber-add" onclick="openAddRoutine()"><i class="ti ti-plus"></i></button>
     </div>
     <div class="scroll-area">
       <div class="progress-summary">
-        <div>
-          <div class="ps-num amber" id="routine-done">0</div>
-          <div class="ps-lbl">feitos</div>
-        </div>
-        <div class="ps-bar-wrap">
-          <div class="ps-bar"><div class="ps-fill amber-fill" id="routine-bar"></div></div>
-        </div>
-        <div class="ps-right">
-          <span id="routine-total">0</span> <span class="ps-lbl">total</span>
-        </div>
+        <div><div class="ps-num amber" id="routine-done">0</div><div class="ps-lbl">feitos</div></div>
+        <div class="ps-bar-wrap"><div class="ps-bar"><div class="ps-fill amber-fill" id="routine-bar"></div></div></div>
+        <div class="ps-right"><span id="routine-total">0</span> <span class="ps-lbl">total</span></div>
       </div>
       <div id="routine-list"></div>
-      <div class="empty-state" id="routine-empty">
-        <i class="ti ti-list-check"></i>
-        <p>Nenhum item na rotina.<br/>Toque em <strong>+</strong> para adicionar.</p>
-      </div>
+      <div class="empty-state" id="routine-empty"><i class="ti ti-list-check"></i><p>Nenhum item na rotina.<br/>Toque em <strong>+</strong> para adicionar.</p></div>
     </div>
     <nav class="bottom-nav">
-      <button class="nav-btn" onclick="goTo('dash')" aria-label="Início"><i class="ti ti-home"></i><span>Início</span></button>
-      <button class="nav-btn" onclick="goTo('treinos')" aria-label="Treinos"><i class="ti ti-barbell"></i><span>Treinos</span></button>
-      <button class="nav-btn" onclick="goTo('estudos')" aria-label="Estudos"><i class="ti ti-book"></i><span>Estudos</span></button>
-      <button class="nav-btn active" onclick="goTo('rotina')" aria-label="Rotina"><i class="ti ti-list-check"></i><span>Rotina</span></button>
-      <button class="nav-btn" onclick="goTo('historico')" aria-label="Histórico"><i class="ti ti-chart-bar"></i><span>Histórico</span></button>
+      <button class="nav-btn" onclick="goTo('dash')"><i class="ti ti-home"></i><span>Início</span></button>
+      <button class="nav-btn" onclick="goTo('treinos')"><i class="ti ti-barbell"></i><span>Treinos</span></button>
+      <button class="nav-btn" onclick="goTo('estudos')"><i class="ti ti-book"></i><span>Estudos</span></button>
+      <button class="nav-btn active"><i class="ti ti-list-check"></i><span>Rotina</span></button>
+      <button class="nav-btn" onclick="goTo('historico')"><i class="ti ti-chart-bar"></i><span>Histórico</span></button>
     </nav>
   </div>
 
-  <!-- ======================== HISTÓRICO ======================== -->
+  <!-- ═══════════════════════════════════════════
+       HISTÓRICO
+  ═══════════════════════════════════════════ -->
   <div id="screen-historico" class="screen">
     <div class="page-header">
-      <button class="back-btn" onclick="goTo('dash')" aria-label="Voltar"><i class="ti ti-arrow-left"></i></button>
-      <div class="page-header-title">
-        <div class="mod-icon purple-icon sm"><i class="ti ti-chart-bar"></i></div>
-        <span>Histórico</span>
-      </div>
-      <button class="add-btn purple-add" onclick="exportData()" aria-label="Exportar dados" title="Exportar JSON">
-        <i class="ti ti-download"></i>
-      </button>
+      <button class="back-btn" onclick="goTo('dash')"><i class="ti ti-arrow-left"></i></button>
+      <div class="page-title"><div class="mod-icon purple-icon sm"><i class="ti ti-chart-bar"></i></div>Histórico</div>
+      <button class="add-btn purple-add" onclick="exportData()" title="Exportar JSON"><i class="ti ti-download"></i></button>
     </div>
     <div class="scroll-area">
       <div class="metrics-row">
-        <div class="metric-card">
-          <div class="metric-num purple" id="hist-streak">12</div>
-          <div class="metric-lbl">sequência atual</div>
-        </div>
-        <div class="metric-card">
-          <div class="metric-num teal" id="hist-best">23</div>
-          <div class="metric-lbl">melhor sequência</div>
-        </div>
-        <div class="metric-card">
-          <div class="metric-num amber" id="hist-total-days">0</div>
-          <div class="metric-lbl">dias registrados</div>
-        </div>
+        <div class="metric-card"><div class="metric-num purple" id="hist-streak">0</div><div class="metric-lbl">sequência atual</div></div>
+        <div class="metric-card"><div class="metric-num teal" id="hist-best">0</div><div class="metric-lbl">melhor sequência</div></div>
+        <div class="metric-card"><div class="metric-num amber" id="hist-total">0</div><div class="metric-lbl">dias registrados</div></div>
       </div>
       <div class="section-label">Últimos 7 dias</div>
       <div id="hist-list"></div>
     </div>
     <nav class="bottom-nav">
-      <button class="nav-btn" onclick="goTo('dash')" aria-label="Início"><i class="ti ti-home"></i><span>Início</span></button>
-      <button class="nav-btn" onclick="goTo('treinos')" aria-label="Treinos"><i class="ti ti-barbell"></i><span>Treinos</span></button>
-      <button class="nav-btn" onclick="goTo('estudos')" aria-label="Estudos"><i class="ti ti-book"></i><span>Estudos</span></button>
-      <button class="nav-btn" onclick="goTo('rotina')" aria-label="Rotina"><i class="ti ti-list-check"></i><span>Rotina</span></button>
-      <button class="nav-btn active" onclick="goTo('historico')" aria-label="Histórico"><i class="ti ti-chart-bar"></i><span>Histórico</span></button>
+      <button class="nav-btn" onclick="goTo('dash')"><i class="ti ti-home"></i><span>Início</span></button>
+      <button class="nav-btn" onclick="goTo('treinos')"><i class="ti ti-barbell"></i><span>Treinos</span></button>
+      <button class="nav-btn" onclick="goTo('estudos')"><i class="ti ti-book"></i><span>Estudos</span></button>
+      <button class="nav-btn" onclick="goTo('rotina')"><i class="ti ti-list-check"></i><span>Rotina</span></button>
+      <button class="nav-btn active"><i class="ti ti-chart-bar"></i><span>Histórico</span></button>
     </nav>
   </div>
 
-  <!-- ======================== CONFIGURAÇÕES ======================== -->
+  <!-- ═══════════════════════════════════════════
+       CONFIGURAÇÕES
+  ═══════════════════════════════════════════ -->
   <div id="screen-settings" class="screen">
     <div class="page-header">
-      <button class="back-btn" onclick="goTo('dash')" aria-label="Voltar"><i class="ti ti-arrow-left"></i></button>
-      <div class="page-header-title">
-        <div class="mod-icon purple-icon sm"><i class="ti ti-settings"></i></div>
-        <span>Configurações</span>
-      </div>
+      <button class="back-btn" onclick="goTo('dash')"><i class="ti ti-arrow-left"></i></button>
+      <div class="page-title"><div class="mod-icon purple-icon sm"><i class="ti ti-settings"></i></div>Configurações</div>
     </div>
     <div class="scroll-area">
       <div class="section-label">Perfil</div>
       <div class="settings-card">
-        <div class="setting-row">
-          <label>Nome</label>
-          <input type="text" id="cfg-name" placeholder="Seu nome" maxlength="30" />
-        </div>
-        <div class="setting-row">
-          <label>Saudação</label>
+        <div class="setting-row"><label>Nome</label><input type="text" id="cfg-name" placeholder="Seu nome" maxlength="30"/></div>
+        <div class="setting-row"><label>Saudação</label>
           <select id="cfg-greeting">
-            <option value="auto">Automática (dia/tarde/noite)</option>
-            <option value="Bom dia">Bom dia sempre</option>
-            <option value="Boa tarde">Boa tarde sempre</option>
+            <option value="auto">Automática</option>
+            <option value="Bom dia">Bom dia</option>
+            <option value="Boa tarde">Boa tarde</option>
             <option value="Olá">Olá</option>
           </select>
         </div>
       </div>
+
       <div class="section-label">Aparência</div>
       <div class="settings-card">
         <div class="setting-row">
           <label>Cor de destaque</label>
           <div class="accent-picker">
-            <button class="accent-opt active" data-accent="purple" style="background:#7F77DD" aria-label="Roxo"></button>
-            <button class="accent-opt" data-accent="teal" style="background:#1D9E75" aria-label="Verde"></button>
-            <button class="accent-opt" data-accent="blue" style="background:#378ADD" aria-label="Azul"></button>
-            <button class="accent-opt" data-accent="coral" style="background:#D85A30" aria-label="Coral"></button>
-            <button class="accent-opt" data-accent="pink" style="background:#D4537E" aria-label="Rosa"></button>
+            <button class="accent-opt active" data-accent="purple" style="background:#7F77DD"></button>
+            <button class="accent-opt" data-accent="teal"   style="background:#1D9E75"></button>
+            <button class="accent-opt" data-accent="blue"   style="background:#378ADD"></button>
+            <button class="accent-opt" data-accent="coral"  style="background:#D85A30"></button>
+            <button class="accent-opt" data-accent="pink"   style="background:#D4537E"></button>
           </div>
         </div>
-        <div class="setting-row">
-          <label>Fonte maior</label>
-          <label class="toggle-switch">
-            <input type="checkbox" id="cfg-font-large" />
-            <span class="toggle-track"></span>
-          </label>
+        <div class="setting-row"><label>Fonte maior</label>
+          <label class="toggle-switch"><input type="checkbox" id="cfg-font-large"/><span class="toggle-track"></span></label>
         </div>
       </div>
-      <div class="section-label">Notificações</div>
+
+      <div class="section-label">Sincronização</div>
       <div class="settings-card">
-        <div class="setting-row">
-          <label>Horário de revisão</label>
-          <input type="time" id="cfg-review-time" value="21:00" />
+        <div class="setting-row-col">
+          <div class="sync-desc">Gere um código para acessar seus dados em outro dispositivo. Expira em 10 minutos.</div>
+          <div class="code-box" id="sync-code-box" style="display:none">
+            <div class="code-val" id="sync-code-val">——</div>
+            <div class="code-exp" id="sync-code-exp">expira em —</div>
+          </div>
+          <div class="qr-wrap" id="sync-qr" style="display:none"></div>
+          <button class="action-btn teal-action" onclick="generateSyncCode()"><i class="ti ti-qrcode"></i> Gerar código + QR Code</button>
         </div>
-        <div class="setting-row">
-          <label>Lembrete ativo</label>
-          <label class="toggle-switch">
-            <input type="checkbox" id="cfg-notif" checked />
-            <span class="toggle-track"></span>
-          </label>
+        <div class="setting-row-col" style="border-top:0.5px solid var(--border);padding-top:12px;margin-top:4px">
+          <div class="sync-desc">Digite o código de 6 dígitos gerado em outro dispositivo:</div>
+          <div class="import-row">
+            <input type="number" id="sync-import-input" placeholder="000000" maxlength="6"/>
+            <button class="import-btn" onclick="importSyncCode()">Carregar</button>
+          </div>
         </div>
       </div>
+
       <div class="section-label">Dados</div>
       <div class="settings-card">
         <button class="action-btn teal-action" onclick="exportData()"><i class="ti ti-download"></i> Exportar dados (JSON)</button>
         <button class="action-btn red-action" onclick="confirmReset()"><i class="ti ti-trash"></i> Resetar dados do dia</button>
       </div>
+
       <button class="save-btn" onclick="saveSettings()"><i class="ti ti-check"></i> Salvar configurações</button>
     </div>
     <nav class="bottom-nav">
-      <button class="nav-btn" onclick="goTo('dash')" aria-label="Início"><i class="ti ti-home"></i><span>Início</span></button>
-      <button class="nav-btn" onclick="goTo('treinos')" aria-label="Treinos"><i class="ti ti-barbell"></i><span>Treinos</span></button>
-      <button class="nav-btn" onclick="goTo('estudos')" aria-label="Estudos"><i class="ti ti-book"></i><span>Estudos</span></button>
-      <button class="nav-btn" onclick="goTo('rotina')" aria-label="Rotina"><i class="ti ti-list-check"></i><span>Rotina</span></button>
-      <button class="nav-btn" onclick="goTo('historico')" aria-label="Histórico"><i class="ti ti-chart-bar"></i><span>Histórico</span></button>
+      <button class="nav-btn" onclick="goTo('dash')"><i class="ti ti-home"></i><span>Início</span></button>
+      <button class="nav-btn" onclick="goTo('treinos')"><i class="ti ti-barbell"></i><span>Treinos</span></button>
+      <button class="nav-btn" onclick="goTo('estudos')"><i class="ti ti-book"></i><span>Estudos</span></button>
+      <button class="nav-btn" onclick="goTo('rotina')"><i class="ti ti-list-check"></i><span>Rotina</span></button>
+      <button class="nav-btn" onclick="goTo('historico')"><i class="ti ti-chart-bar"></i><span>Histórico</span></button>
     </nav>
   </div>
 
-  <!-- ======================== MODAIS ======================== -->
+  <!-- ═══════════════════════════════════════════
+       MODAIS
+  ═══════════════════════════════════════════ -->
 
-  <!-- Modal: Adicionar Exercício -->
+  <!-- Exercício -->
   <div class="modal-overlay" id="modal-exercise">
     <div class="modal">
-      <div class="modal-header">
-        <span id="modal-ex-title">Adicionar exercício</span>
-        <button class="modal-close" onclick="closeModal('modal-exercise')" aria-label="Fechar"><i class="ti ti-x"></i></button>
-      </div>
+      <div class="modal-header"><span id="modal-ex-title">Adicionar exercício</span><button class="modal-close" onclick="closeModal('modal-exercise')"><i class="ti ti-x"></i></button></div>
       <div class="modal-body">
-        <label class="field-label">Nome do exercício</label>
-        <input type="text" id="ex-name-input" placeholder="ex: Supino reto" maxlength="40" />
-        <label class="field-label">Séries planejadas</label>
-        <div class="num-row">
-          <button class="num-btn" onclick="adjField('ex-series-input',-1)">−</button>
-          <input type="number" id="ex-series-input" value="4" min="1" max="20" />
-          <button class="num-btn" onclick="adjField('ex-series-input',1)">+</button>
+        <label class="field-label">Nome</label>
+        <input type="text" id="ex-name-input" placeholder="ex: Supino reto" maxlength="40"/>
+        <label class="field-label">Modo</label>
+        <div class="mode-pill">
+          <button class="mpill on" id="mpill-counter" onclick="setExModeUI('counter')">Contador de séries</button>
+          <button class="mpill" id="mpill-check" onclick="setExModeUI('check')">Marcar feito</button>
         </div>
-        <label class="field-label">Duração estimada (min)</label>
-        <div class="num-row">
-          <button class="num-btn" onclick="adjField('ex-min-input',-5)">−</button>
-          <input type="number" id="ex-min-input" value="15" min="1" max="120" />
-          <button class="num-btn" onclick="adjField('ex-min-input',5)">+</button>
+        <div id="ex-series-row">
+          <label class="field-label">Séries</label>
+          <div class="num-row"><button class="num-btn" onclick="adjField('ex-series-input',-1)">−</button><input type="number" id="ex-series-input" value="4" min="1" max="30"/><button class="num-btn" onclick="adjField('ex-series-input',1)">+</button></div>
         </div>
+        <label class="field-label">Duração (min) — 0 = sem limite</label>
+        <div class="num-row"><button class="num-btn" onclick="adjField('ex-min-input',-5)">−</button><input type="number" id="ex-min-input" value="0" min="0" max="120"/><button class="num-btn" onclick="adjField('ex-min-input',5)">+</button></div>
         <label class="field-label">Observação (opcional)</label>
-        <input type="text" id="ex-note-input" placeholder="ex: 70kg, descanso 90s" maxlength="60" />
+        <input type="text" id="ex-note-input" placeholder="ex: 70kg, descanso 90s" maxlength="60"/>
       </div>
       <div class="modal-footer">
         <button class="btn-cancel" onclick="closeModal('modal-exercise')">Cancelar</button>
@@ -383,46 +361,53 @@
     </div>
   </div>
 
-  <!-- Modal: Adicionar Estudo -->
-  <div class="modal-overlay" id="modal-study">
+  <!-- Item Plano Semanal -->
+  <div class="modal-overlay" id="modal-week-item">
     <div class="modal">
-      <div class="modal-header">
-        <span id="modal-study-title">Adicionar matéria</span>
-        <button class="modal-close" onclick="closeModal('modal-study')" aria-label="Fechar"><i class="ti ti-x"></i></button>
-      </div>
+      <div class="modal-header"><span>Adicionar em <span id="week-item-day-label"></span></span><button class="modal-close" onclick="closeModal('modal-week-item')"><i class="ti ti-x"></i></button></div>
       <div class="modal-body">
-        <label class="field-label">Nome da matéria</label>
-        <input type="text" id="study-name-input" placeholder="ex: Inglês" maxlength="40" />
-        <label class="field-label">Tempo planejado (min)</label>
-        <div class="num-row">
-          <button class="num-btn" onclick="adjField('study-target-input',-5)">−</button>
-          <input type="number" id="study-target-input" value="60" min="5" max="480" />
-          <button class="num-btn" onclick="adjField('study-target-input',5)">+</button>
-        </div>
+        <label class="field-label">Matéria / conteúdo</label>
+        <input type="text" id="week-item-name" placeholder="ex: Inglês — listening" maxlength="50"/>
+        <label class="field-label">Duração (min) — 0 = sem limite</label>
+        <div class="num-row"><button class="num-btn" onclick="adjField('week-item-min',-5)">−</button><input type="number" id="week-item-min" value="45" min="0" max="480"/><button class="num-btn" onclick="adjField('week-item-min',5)">+</button></div>
         <label class="field-label">Observação (opcional)</label>
-        <input type="text" id="study-note-input" placeholder="ex: Duolingo + podcast" maxlength="60" />
+        <input type="text" id="week-item-note" placeholder="ex: capítulos 5 e 6" maxlength="60"/>
       </div>
       <div class="modal-footer">
-        <button class="btn-cancel" onclick="closeModal('modal-study')">Cancelar</button>
-        <button class="btn-confirm teal-confirm" onclick="confirmStudy()">Salvar</button>
+        <button class="btn-cancel" onclick="closeModal('modal-week-item')">Cancelar</button>
+        <button class="btn-confirm teal-confirm" onclick="confirmWeekItem()">Salvar</button>
       </div>
     </div>
   </div>
 
-  <!-- Modal: Adicionar Rotina -->
+  <!-- Prova -->
+  <div class="modal-overlay" id="modal-prova">
+    <div class="modal">
+      <div class="modal-header"><span>Nova prova / concurso</span><button class="modal-close" onclick="closeModal('modal-prova')"><i class="ti ti-x"></i></button></div>
+      <div class="modal-body">
+        <label class="field-label">Nome da prova</label>
+        <input type="text" id="prova-name-input" placeholder="ex: ENEM, TOEFL, Concurso X" maxlength="50"/>
+        <label class="field-label">Dias até a prova</label>
+        <div class="num-row"><button class="num-btn" onclick="adjField('prova-days-input',-1)">−</button><input type="number" id="prova-days-input" value="30" min="1" max="365"/><button class="num-btn" onclick="adjField('prova-days-input',1)">+</button></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" onclick="closeModal('modal-prova')">Cancelar</button>
+        <button class="btn-confirm amber-confirm" onclick="confirmProva()">Criar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Rotina -->
   <div class="modal-overlay" id="modal-routine">
     <div class="modal">
-      <div class="modal-header">
-        <span id="modal-routine-title">Adicionar item</span>
-        <button class="modal-close" onclick="closeModal('modal-routine')" aria-label="Fechar"><i class="ti ti-x"></i></button>
-      </div>
+      <div class="modal-header"><span id="modal-routine-title">Adicionar item</span><button class="modal-close" onclick="closeModal('modal-routine')"><i class="ti ti-x"></i></button></div>
       <div class="modal-body">
-        <label class="field-label">Nome do item</label>
-        <input type="text" id="routine-name-input" placeholder="ex: Meditação" maxlength="40" />
+        <label class="field-label">Nome</label>
+        <input type="text" id="routine-name-input" placeholder="ex: Meditação" maxlength="40"/>
         <label class="field-label">Ícone</label>
         <div class="icon-picker" id="routine-icon-picker"></div>
         <label class="field-label">Horário (opcional)</label>
-        <input type="time" id="routine-time-input" />
+        <input type="time" id="routine-time-input"/>
         <label class="field-label">Recorrência</label>
         <select id="routine-recur-input">
           <option value="diário">Diário</option>
@@ -438,16 +423,11 @@
     </div>
   </div>
 
-  <!-- Modal: Confirmar exclusão -->
+  <!-- Confirmação -->
   <div class="modal-overlay" id="modal-confirm">
     <div class="modal modal-sm">
-      <div class="modal-header">
-        <span id="confirm-title">Confirmar</span>
-        <button class="modal-close" onclick="closeModal('modal-confirm')" aria-label="Fechar"><i class="ti ti-x"></i></button>
-      </div>
-      <div class="modal-body">
-        <p id="confirm-msg" style="font-size:14px;color:var(--muted);line-height:1.6"></p>
-      </div>
+      <div class="modal-header"><span id="confirm-title">Confirmar</span><button class="modal-close" onclick="closeModal('modal-confirm')"><i class="ti ti-x"></i></button></div>
+      <div class="modal-body"><p id="confirm-msg" style="font-size:14px;color:var(--muted);line-height:1.6"></p></div>
       <div class="modal-footer">
         <button class="btn-cancel" onclick="closeModal('modal-confirm')">Cancelar</button>
         <button class="btn-confirm red-confirm" id="confirm-ok-btn">Confirmar</button>
@@ -455,11 +435,8 @@
     </div>
   </div>
 
-  <!-- Toast -->
   <div class="toast" id="toast"></div>
-
 </div>
-
 <script src="app.js"></script>
 </body>
 </html>
